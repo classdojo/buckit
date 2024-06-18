@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: buckit
+  name: buckit
+spec:
+  minReadySeconds: 50
+  progressDeadlineSeconds: 600
+  replicas: 2
+  selector:
+    matchLabels: { app: buckit }
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels: { app: buckit }
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm64
+      volumes:
+        - configMap:
+            name: buckit-init
+          name: buckit-init
+      containers:
+        - name: buckit
+          command:
+            - bash
+            - /mnt/buckit-init/buckit-init.sh
+          ports:
+            - containerPort: 9000
+              name: http
+          image: 347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: CONSUL_LOCAL_IP
+              valueFrom: { fieldRef: { fieldPath: status.hostIP } }
+          volumeMounts:
+            - mountPath: /mnt/buckit-init
+              name: buckit-init
+          resources:
+            limits:
+              memory: 120Mi
+            requests:
+              cpu: 20m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: FallbackToLogsOnError
+      nodeSelector:
+        kubernetes.io/os: linux
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels: { app: buckit }
+          maxSkew: 3
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+        - labelSelector:
+            matchLabels: { app: buckit }
+          maxSkew: 3
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway

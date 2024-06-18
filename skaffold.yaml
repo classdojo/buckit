@@ -1,0 +1,37 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+build:
+  artifacts:
+    - image: 347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit
+      sync:
+        manual:
+          - src: "**/*"
+            dest: .
+  local:
+    push: false
+    useBuildkit: true
+manifests:
+  kustomize:
+    paths:
+      - k8s/dev
+profiles:
+  - name: prod
+    build:
+      artifacts:
+        - image: 347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit
+          platforms:
+            - linux/amd64
+            - linux/arm64
+          docker:
+            dockerfile: Dockerfile
+      local:
+        push: true
+        useBuildkit: true
+        concurrency: 2
+    manifests:
+      kustomize:
+        paths:
+          - k8s/prod
+    deploy:
+      statusCheck: false
+      kubeContext: aws/us-east-1-prod
