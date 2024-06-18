@@ -32,6 +32,15 @@ wait_for_consul_leader
 
 mkdir -p /secrets
 
-consul_get config/buckit/config.yaml > "/secrets/config.json"
+MINWAIT=10
+MAXWAIT=30
+while true; do {
+  echo -e "---\n$(consul_get config/buckit/config.yaml)" > /secrets/config.yaml.2
+  if ! cmp -s /secrets/config.yaml /secrets/config.yaml.2; then
+    mv /secrets/config.yaml.2 /secrets/config.yaml
+  fi
+  sleep $((MINWAIT+RANDOM % (MAXWAIT-MINWAIT)))
+}; done &
 
-buckit --config /secrets/config.json
+sleep 3
+buckit --config /secrets/config.yaml

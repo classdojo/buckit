@@ -1,9 +1,10 @@
-module github.com/urjitbhatia/buckit
+module github.com/classdojo/buckit
 
-go 1.17
+go 1.22
 
 require (
 	github.com/aws/aws-sdk-go v1.42.15
+	github.com/fsnotify/fsnotify v1.5.1
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
 	gocloud.dev v0.24.0
@@ -19,7 +20,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.4.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.7.0 // indirect
 	github.com/aws/smithy-go v1.8.0 // indirect
-	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/wire v0.5.0 // indirect
@@ -28,7 +28,6 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/spf13/afero v1.6.0 // indirect

@@ -3,11 +3,12 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"gocloud.dev/blob/s3blob"
 	"log"
 	"net/http"
+	"os"
 	"time"
+
+	"gocloud.dev/blob/s3blob"
 
 	_ "gocloud.dev/blob/s3blob"
 
@@ -57,6 +58,14 @@ func (a *App) handlerFunc() http.HandlerFunc {
 			http.Error(w, "method not supported", http.StatusMethodNotAllowed)
 			return
 		}
+
+		// Health check handler
+		healthCheckHost := os.Getenv("HEALTH_CHECK_HOSTNAME")
+		if len(healthCheckHost) > 0 && r.Host == healthCheckHost && r.URL.Path == "/healthz" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		for _, b := range a.Config.Buckits {
 			if b.HostName == r.Host {
 				fetchResource(w, r, b)
@@ -76,25 +85,24 @@ func fetchResource(w http.ResponseWriter, r *http.Request, b buckit) {
 	// See https://docs.aws.amazon.com/sdk-for-go/api/aws/session/ for more info.
 	// The region must match the region for "my-bucket".
 	sess, err := session.NewSession(&aws.Config{
-		Credentials: credentials.NewEnvCredentials(),
 		Region:      aws.String(b.Region),
 	})
 	if err != nil {
-		log.Println(err)
+		log.Println("cannot create session", b.BucketName, err)
 		http.Error(w, "cannot connect to bucket", http.StatusInternalServerError)
 		return
 	}
 
 	bucket, err := s3blob.OpenBucket(r.Context(), sess, b.BucketName, nil)
 	if err != nil {
-		log.Println(err)
+		log.Println("cannot open bucket", b.BucketName, err)
 		http.Error(w, "cannot connect to bucket", http.StatusInternalServerError)
 		return
 	}
 
 	br, err := bucket.NewReader(r.Context(), path, nil)
 	if err != nil {
-		log.Println(err)
+		log.Println("cannot find data", b.BucketName, path, err)
 		http.Error(w, "cannot find data", http.StatusNotFound)
 		return
 	}
@@ -103,7 +111,7 @@ func fetchResource(w http.ResponseWriter, r *http.Request, b buckit) {
 
 	_, err = br.WriteTo(w)
 	if err != nil {
-		log.Println(err)
+		log.Println("cannot write back to request", b.BucketName, err)
 		http.Error(w, "cannot fetch data", http.StatusInternalServerError)
 		return
 	}

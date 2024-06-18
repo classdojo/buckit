@@ -56,11 +56,35 @@ spec:
           image: 347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit
           imagePullPolicy: IfNotPresent
           env:
+            - name: HEALTH_CHECK_HOSTNAME
+              value: buckit-health-check.internal.classdojo.com
             - name: CONSUL_LOCAL_IP
               valueFrom: { fieldRef: { fieldPath: status.hostIP } }
           volumeMounts:
             - mountPath: /mnt/buckit-init
               name: buckit-init
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: buckit-health-check.internal.classdojo.com
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: buckit-health-check.internal.classdojo.com
+            initialDelaySeconds: 10
+            periodSeconds: 5
           resources:
             limits:
               memory: 120Mi

@@ -1,0 +1,8 @@
+**
+!cmd
+!vendor
+!go.mod
+!go.sum
+!main.go
+!LICENSE
+!README.md
