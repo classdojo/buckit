@@ -6,6 +6,7 @@ metadata:
   name: admin-internal-classdojo
   annotations:
     haproxy-ingress.github.io/allowlist-source-range: "10.0.0.0/8"
+    haproxy-ingress.github.io/maxconn-server: "20"
     haproxy-ingress.github.io/config-backend: |
       http-response set-header Access-Control-Allow-Origin *
       http-response add-header X-Backend-Group s3-admin.internal.classdojo.com
