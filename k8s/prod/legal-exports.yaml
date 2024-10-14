@@ -1,3 +1,26 @@
+# Steps for adding new exports:
+#
+# 1. Use the entityID for the user whose data is exported or gen a random uuid (pwgen -s 40)
+#
+# 2. Create a dir in the legalexports bucket using the unique-id and upload the data in there
+#
+# 3. Create a matching rule in Buckit config here: https://consul.internal.classdojo.com/ui/us-east-1/kv/config/buckit/config.yaml/edit
+# Add the following:
+#   - HostName: <unique-id>export.classdojo.com
+#     BucketName: legalexports
+#     Region: us-east-1
+#
+# 4. Use the unique id to create an entry below with a new hostname like `${entityID}-export.classdojo.com`
+#
+# 5. Add new, unique auth credentials at https://vault.internal.classdojo.com/ui/vault/secrets/prod/kv/buckit%2Fauth/details
+#    You can generate a random password with `pwgen -s 40`
+#    You can format username:password into htaccess format with `htpasswd -nb username password`
+#
+# 6. Add a route53 entry:
+#    Use "alias" record type
+#    point:  <unique-id>export.classdojo.com
+#    target: dualstack.ext-us-east-1-prod-ingress-1906707066.us-east-1.elb.amazonaws.com.
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
