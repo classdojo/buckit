@@ -6,7 +6,7 @@ metadata:
   annotations:
     ingress.kubernetes.io/auth-type: basic
     ingress.kubernetes.io/auth-realm: "ClassDojo"
-    ingress.kubernetes.io/auth-secret: bucket-auth
+    ingress.kubernetes.io/auth-secret: buckit-auth
     haproxy-ingress.github.io/allowlist-source-range: "0.0.0.0/0"
     haproxy-ingress.github.io/maxconn-server: "20"
     haproxy-ingress.github.io/config-backend: |
