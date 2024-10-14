@@ -25,7 +25,7 @@ jobs:
 
       - name: Skaffold deploy
         run: |
-          skaffold run \
+          skaffold deploy \
             --profile=prod \
             --images="347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit:${{ github.sha }}" \
             --namespace=buckit \
