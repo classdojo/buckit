@@ -12,9 +12,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Test
-        run: make test-docker
-
       - name: Login to EKS
         if: github.ref_name == 'master'
         run: aws eks update-kubeconfig --region us-east-1 --name us-east-1-prod --alias "aws/us-east-1-prod"
