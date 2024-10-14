@@ -14,7 +14,8 @@
 #
 # 5. Add new, unique auth credentials at https://vault.internal.classdojo.com/ui/vault/secrets/prod/kv/buckit%2Fauth/details
 #    You can generate a random password with `pwgen -s 40`
-#    You can format username:password into htaccess format with `htpasswd -nb username password`
+#    Passwords should be 40 characters long. Use the syntax `username::password`
+#    See additional docs at https://github.com/jcmoraisjr/haproxy-ingress/blob/19d1d957817e21e5f12d6f20f2885490edf46919/examples/auth/basic/README.md
 #
 # 6. Add a route53 entry:
 #    Use "alias" record type
