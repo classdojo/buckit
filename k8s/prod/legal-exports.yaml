@@ -1,0 +1,68 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: legal-exports
+  labels: { app: buckit }
+  annotations:
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-realm: "ClassDojo"
+    ingress.kubernetes.io/auth-secret: bucket-auth
+    haproxy-ingress.github.io/allowlist-source-range: "0.0.0.0/0"
+    haproxy-ingress.github.io/maxconn-server: "20"
+    haproxy-ingress.github.io/config-backend: |
+      http-response set-header Strict-Transport-Security max-age=31536000
+      http-response add-header Access-Control-Allow-Origin *
+spec:
+  ingressClassName: haproxy-ingress-external
+  rules:
+    # DO NOT DELETE TILL EOM NOV 2023 - LEGAL EXPORT REQUIREMENT
+    - host: 5f36a5f8160e3a240daae396export.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }
+
+    ## DO NOT DELETE TILL EOM OCT 2024 - LEGAL EXPORT REQUIREMENT
+    - host: 562452242374c02854a743a8export.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }
+
+    ## DO NOT DELETE TILL EOM NOV 2024 - LEGAL EXPORT REQUIREMENT
+    ## Relevant person: Natalia
+    - host: 5d49000b3e34b7ad9fb4fc3fexport.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }
+
+    ## DO NOT DELETE TILL EOM DEC 2024 - LEGAL EXPORT REQUIREMENT
+    ## Relevant person: Natalia
+    - host: 7d09c90b-a259-4f65-b302-bfc101e9eb93export.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }
+
+    ## DO NOT DELETE TILL EOM Jan 2025 - LEGAL EXPORT REQUIREMENT
+    ## Relevant person: Natalia
+    - host: 62a0a56537ce71026ad59eaaexport.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }
+
+    ## DO NOT DELETE TILL EOM Oct 2025 - LEGAL EXPORT REQUIREMENT
+    ## Relevant person: Natalia
+    - host: 55d3b5e6d5fe08d611214481export.classdojo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: buckit, port: { name: http } } }

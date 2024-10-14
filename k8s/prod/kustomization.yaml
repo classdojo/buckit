@@ -6,6 +6,8 @@ resources:
   - ./service.yaml
   - ./pdb.yaml
   - ./autoscaler.yaml
+  - ./vaultStaticSecret.yaml
+  - ./legal-exports.yaml
 configMapGenerator:
   - name: buckit-init
     files:
