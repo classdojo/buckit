@@ -21,7 +21,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push Docker image
-        run: ./scripts/buildx.sh runner ${{ github.sha }}
+        run: ./buildx.sh runner ${{ github.sha }}
 
       - name: Skaffold deploy
         run: |
