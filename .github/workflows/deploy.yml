@@ -1,0 +1,35 @@
+name: Buckit Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    name: Test, Build and Deploy
+    runs-on: [self-hosted, buckit]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Test
+        run: make test-docker
+
+      - name: Login to EKS
+        if: github.ref_name == 'master'
+        run: aws eks update-kubeconfig --region us-east-1 --name us-east-1-prod --alias "aws/us-east-1-prod"
+
+      - name: Login to Amazon ECR
+        if: github.ref_name == 'master'
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        run: ./scripts/buildx.sh runner ${{ github.sha }}
+
+      - name: Skaffold deploy
+        run: |
+          skaffold run \
+            --profile=prod \
+            --images="347708466071.dkr.ecr.us-east-1.amazonaws.com/classdojo/buckit:${{ github.sha }}" \
+            --namespace=buckit \
+            --kube-context=aws/us-east-1-prod
