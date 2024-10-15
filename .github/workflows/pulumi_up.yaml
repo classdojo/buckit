@@ -16,6 +16,9 @@ jobs:
         run: npm install
         working-directory: ./infra/pulumi
 
+      - run: |
+          pulumi stack init --stack=organization/buckit/prod
+
       - uses: pulumi/actions@v5
         env:
           PULUMI_CONFIG_PASSPHRASE: ""
