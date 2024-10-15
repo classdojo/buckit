@@ -1,0 +1,26 @@
+name: Pulumi up
+on:
+  push:
+    branches: [master]
+    paths:
+      - infra/pulumi/**
+
+jobs:
+  up:
+    name: Preview
+    runs-on: [self-hosted, buckit]
+    steps:
+      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - name: Installing dependencies
+        run: npm install
+        working-directory: ./infra/pulumi
+
+      - uses: pulumi/actions@v5
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ""
+        with:
+          command: up
+          stack-name: prod
+          cloud-url: s3://cloudplatform-pulumi-stacks
+          work-dir: infra/pulumi
