@@ -1,0 +1,6 @@
+secretsprovider: awskms://alias/pulumi?region=us-east-1
+encryptedkey: AQICAHhjoDI8XMcNw20D1QttgHxb7YYF9bmXMYK37gEi+o5LMAFTZjCwq4fgGxkhyTh7PsIYAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMN1nIBblwpgadG1r6AgEQgDvpQzm5u4sqytjUEMMDyyhsv5EV676G8mhWBl5S7koQCSIdooeSvhNnMV1TucN4ZgwdmPbAzA3j0WZSLw==
+config:
+  aws:region: us-east-1
+  buckit:namespace: buckit
+  buckit:replicas: "1"

@@ -12,9 +12,13 @@ jobs:
     steps:
       - uses: actions/setup-node@v4
       - uses: actions/checkout@v4
+
       - name: Installing dependencies
-        run: npm install
         working-directory: ./infra/pulumi
+        shell: bash {0}
+        env:
+          NPM_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: npm install
 
       - uses: pulumi/actions@v5
         env:
