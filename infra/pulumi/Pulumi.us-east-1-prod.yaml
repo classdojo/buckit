@@ -4,3 +4,4 @@ config:
   aws:region: us-east-1
   buckit:namespace: buckit
   buckit:replicas: "1"
+  kubernetes:context: aws/us-east-1-prod

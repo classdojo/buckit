@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
+    "target": "esnext",
     "outDir": "bin",
-    "target": "es2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -10,9 +10,10 @@
     "pretty": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "baseUrl": "."
   },
-  "files": [
-    "index.ts"
-  ]
+  "files": ["./index.ts"],
+  "include": ["./node_modules/pulumi-types/**/*.ts", "./index.ts"]
 }
